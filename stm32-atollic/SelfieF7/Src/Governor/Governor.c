@@ -59,6 +59,8 @@ float podjedz_pan_distance = -80.f;
 
 driving_state_t old_driving_state = disarmed;
 
+extern uint8_t synchroniseUARTOdroid;
+
 void reset_all_to_challenge(void);
 
 void lane_switch_f(void);
@@ -121,9 +123,11 @@ void autonomous_task_f(void) {
 		set_angle = 90;
 	} else if (j_syncByte == 200) //je?eli nie istnieje Jetson <-> STM, wylacz naped (wartosc j_syncByte = 200 jest ustawiana przez TIMER10)
 			{
-		set_spd = 0;
-		set_angle = 90;
-		set_pos = 1000;
+		synchroniseUARTOdroid = 0;
+        HAL_UART_Receive_DMA(&huart4, &j_syncByte, 1);
+//		set_spd = 0;
+//		set_angle = 90;
+//		set_pos = 1000;
 	}
 
 	switch (autonomous_task) {
