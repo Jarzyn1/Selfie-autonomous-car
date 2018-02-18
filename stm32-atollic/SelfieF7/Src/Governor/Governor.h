@@ -8,6 +8,9 @@
 #ifndef GOVERNOR_GOVERNOR_H_
 #define GOVERNOR_GOVERNOR_H_
 
+#include "stdint.h"
+
+int32_t last_odroid_byte;
 typedef enum driving_state_e
 {
 	disarmed = 0,
@@ -29,6 +32,11 @@ enum autonomous_task_e
 	parkingsearch,
 	parking,
 }autonomous_task;
+
+float speed_freerun;
+float speed_corners;
+float speed_obstacles;
+float speed_parking;
 
 float parking_depth;
 float parking_turn_sharpness;
