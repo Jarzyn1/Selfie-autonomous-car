@@ -107,11 +107,11 @@ float pid_calculateServoPos(pid_params *pid_paramPos, float set_pos, float read_
 	float err_d, u, uPos;
 	static float uPos_last = 0;
 
-	//////////////regulator od pozycji
-	//if(((j_jetsonData[1] + j_jetsonData[2]) * 0.5) < 90)
-		//read_pos = read_pos + (80 - (j_jetsonData[1] + j_jetsonData[2] * 0.5));
-	//else if(((j_jetsonData[1] + j_jetsonData[2]) * 0.5) > 90)
-		//read_pos = read_pos - ((j_jetsonData[1] + j_jetsonData[2] * 0.5) - 90);
+//	////////////regulator od pozycji
+//	if(((j_jetsonData[1] + j_jetsonData[2]) * 0.5) < 90)
+//		read_pos = read_pos + (80 - (j_jetsonData[1] + j_jetsonData[2] * 0.5));
+//	else if(((j_jetsonData[1] + j_jetsonData[2]) * 0.5) > 90)
+//		read_pos = read_pos - ((j_jetsonData[1] + j_jetsonData[2] * 0.5) - 90);
 	read_filtered = pt1FilterApply(&OdroidLPF, read_pos);
 	pid_paramPos->err = set_pos - read_filtered;
 	pid_paramPos->err_sum += pid_paramPos->err;
@@ -167,7 +167,7 @@ float pid_calculateServoAng(pid_params *pid_paramAng, float set_angle, float rea
 	uAng = (pid_paramAng->kp * pid_paramAng->err + pid_paramAng->ki * pid_paramAng->err_sum
 		+ pid_paramAng->kd * err_d);
 
-		uAng = servo_middle + uAng;
+		uAng = servo_middle - uAng;
 		if(uAng > (servo_middle+servo_bandwith)) uAng = servo_middle+servo_bandwith;
 		if(uAng < (servo_middle-servo_bandwith)) uAng = servo_middle-servo_bandwith;
 
@@ -252,7 +252,7 @@ void StartPID(void){
 
 	SetPidState(&pid_paramsEngine, PID_RUNNING);
 	SetPidState(&pid_paramsServoPos, PID_RUNNING);
-	SetPidState(&pid_paramsServoAng, PID_STOPPED);
+	SetPidState(&pid_paramsServoAng, PID_RUNNING);
 }
 float pid_servo_f(void)
 {
